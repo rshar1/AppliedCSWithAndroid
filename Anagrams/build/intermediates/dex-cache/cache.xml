@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="/home/rshar1/Documents/AppliedCS/Anagrams/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-22.2.1_bb50d076d8b80caa2417e4474f2ecd1ce94e373e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/.android/build-cache/a0cf4eac18031141c6084c5962f5f602b85b6e31/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="f8efd0096475e0daf054267b61544e10dc776503">
+        <dex dex="/home/rshar1/Documents/AppliedCS/Anagrams/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3cccfe0edd2ca082b6079055a8eca91e955d8496/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/.android/build-cache/810eafbdf7b31c3ecd8a39e0d302ceef46584981/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="1821601ddbec5ff125653097812823388700af74">
+        <dex dex="/home/rshar1/Documents/AppliedCS/Anagrams/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_78212d7f6a612e98d3aefdf4165e1ab0147c943b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/.android/build-cache/a0cf4eac18031141c6084c5962f5f602b85b6e31/output/jars/libs/internal_impl-22.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="/home/rshar1/Documents/AppliedCS/Anagrams/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-22.2.1_4c6cdad38539e56fb60e4a68e352324480b74c1c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/Documents/AppliedCS/Anagrams/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/rshar1/Documents/AppliedCS/Anagrams/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_49526112101ca93c189754c3256003027e19f8ae/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/.android/build-cache/ab71ae19c5206f4291364f693db93c3dcd22b74b/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
+        <dex dex="/home/rshar1/Documents/AppliedCS/Anagrams/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_d832f7234a94bbe4654c63caf7ab138e1cdbbd81/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/Documents/AppliedCS/Anagrams/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="709d29bf274ec424acb1f80745d549fc24c3fd65">
+        <dex dex="/home/rshar1/Documents/AppliedCS/Anagrams/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_90f34c8efca64e302f42f8a36d7f10868b36a91b/classes.dex" />
+    </item>
+
+</items>

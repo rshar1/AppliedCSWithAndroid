@@ -19,6 +19,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -28,22 +31,45 @@ public class AnagramDictionary {
     private static final int DEFAULT_WORD_LENGTH = 3;
     private static final int MAX_WORD_LENGTH = 7;
     private Random random = new Random();
+    private ArrayList<String> wordList = new ArrayList<>();
+    private HashSet<String> wordSet = new HashSet<>();
+    private HashMap<String, ArrayList<String>> lettersToWord = new HashMap<>();
+
 
     public AnagramDictionary(Reader reader) throws IOException {
         BufferedReader in = new BufferedReader(reader);
         String line;
         while((line = in.readLine()) != null) {
             String word = line.trim();
+            wordList.add(word);
+            wordSet.add(word);
+            String sortedWord = sortLetters(word);
+            if (lettersToWord.containsKey(sortedWord)) {
+                lettersToWord.get(sortedWord).add(word);
+            } else {
+                lettersToWord.put(sortedWord, new ArrayList<String>());
+                lettersToWord.get(sortedWord).add(word);
+            }
         }
     }
 
     public boolean isGoodWord(String word, String base) {
-        return true;
+        return wordSet.contains(word);
     }
 
     public List<String> getAnagrams(String targetWord) {
         ArrayList<String> result = new ArrayList<String>();
+        for (String word: wordList) {
+            if (word.length() == targetWord.length() && sortLetters(word).equals(sortLetters(targetWord)))
+                result.add(word);
+        }
         return result;
+    }
+
+    private String sortLetters(String str) {
+        char[] arr = str.toCharArray();
+        Arrays.sort(arr);
+        return new String(arr);
     }
 
     public List<String> getAnagramsWithOneMoreLetter(String word) {
@@ -52,6 +78,6 @@ public class AnagramDictionary {
     }
 
     public String pickGoodStarterWord() {
-        return "stop";
+        return wordList.get(random.nextInt(wordList.size()));
     }
 }
