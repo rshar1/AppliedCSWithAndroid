@@ -1,5 +1,6 @@
 package com.raamisharif.scarnesdice;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,16 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.dice5,
             R.drawable.dice6
     };
+    private int numRolled = 0;
+    private Handler handler = new Handler();
+    private final int DELAY = 2000;
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            computerTurn();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,29 +42,29 @@ public class MainActivity extends AppCompatActivity {
     /**  Called when the user clicks the roll button */
     public void roll(View view) {
 
-        int numRolled = rollAndDisplay();
+        numRolled = rollAndDisplay();
 
         TextView label = (TextView) findViewById(R.id.textView);
         if (numRolled == 1) {
             userTurnScore = 0;
             label.setText("Your Score: " + userOverallScore + " Computer Score: " + compOverallScore);
-            computerTurn();
+            startComputerTurn();
         } else {
             userTurnScore += numRolled;
             label.setText("Your Score: " + userOverallScore + " Computer Score: " + compOverallScore + " Your turn score: " + userTurnScore);
         }
 
-
     }
 
     /** Called when the user clicks the hold button */
     public void hold(View view) {
+
         userOverallScore += userTurnScore;
         userTurnScore = 0;
         TextView label = (TextView) findViewById(R.id.textView);
         label.setText("Your Score: " + userOverallScore + " Computer Score: " + compOverallScore);
         checkGameOver();
-        computerTurn();
+        startComputerTurn();
     }
 
     /** Called when the user clicks the reset button */
@@ -67,34 +78,46 @@ public class MainActivity extends AppCompatActivity {
         btnRoll.setEnabled(true);
     }
 
+    private void startComputerTurn() {
+        Button btnRoll = (Button) findViewById(R.id.button);
+        Button btnHold = (Button) findViewById(R.id.button2);
+        btnRoll.setEnabled(false);
+        btnHold.setEnabled(false);
+        handler.postDelayed(runnable, DELAY);
+    }
 
     public void computerTurn() {
         Button btnRoll = (Button) findViewById(R.id.button);
         Button btnHold = (Button) findViewById(R.id.button2);
         TextView label = (TextView) findViewById(R.id.textView);
 
-        btnRoll.setEnabled(false);
-        btnHold.setEnabled(false);
-
-        int numRolled = 0;
-        while (compTurnScore < 20 && compTurnScore + compOverallScore < 100 && (numRolled = rollAndDisplay()) != 1) {
-            compTurnScore += numRolled;
-            label.setText("Your Score: " + userOverallScore + " Computer Score: " + compOverallScore + " Computer turn score: " + compTurnScore);
-            // todo wait
-        }
-
-        if (numRolled != 1) {
+        if (compTurnScore >= 20 || compOverallScore + compTurnScore >= 100) {
             compOverallScore += compTurnScore;
+            compTurnScore = 0;
             label.setText("Your Score: " + userOverallScore + " Computer Score: " + compOverallScore + " Computer holds");
-        } else {
-            label.setText("Your Score: " + userOverallScore + " Computer Score: " + compOverallScore + " Computer rolled 1");
+            btnHold.setEnabled(true);
+            btnRoll.setEnabled(true);
+            checkGameOver();
+            return;
         }
 
-        compTurnScore = 0;
-        btnHold.setEnabled(true);
-        btnRoll.setEnabled(true);
-        checkGameOver();
+        numRolled = rollAndDisplay();
+
+        if (numRolled == 1) {
+            compTurnScore = 0;
+            label.setText("Your Score: " + userOverallScore + " Computer Score: " + compOverallScore + " Computer rolled 1");
+            btnHold.setEnabled(true);
+            btnRoll.setEnabled(true);
+            return;
+        }
+
+        label.setText("Your Score: " + userOverallScore + " Computer Score: " + compOverallScore + " Computer turn score: " + compTurnScore);
+
+        compTurnScore += numRolled;
+        handler.postDelayed(runnable, DELAY);
+
     }
+
 
     private int rollAndDisplay() {
         int numRolled = (int) (Math.random() * 6);
