@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/.android/build-cache/b95df7318d16ac4d0545fc494885609bb6913b75/output/jars/libs/internal_impl-23.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.4.0_172679491d615ca17955d2aede4d8656e4268bb8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/.android/build-cache/a810ce0e8670cce3df889149a99e5062c467e4f7/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_41215044a77d9220c8ce572260ed85d1806bae23/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_a91af500cf828a4384390c733b4dda5d7a8b2b2e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/.android/build-cache/b95df7318d16ac4d0545fc494885609bb6913b75/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_25f1a7065442a24b173994dde08ff14f21f3c08d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="6278bb1e04e86258c39ea65b7b7dccf8bffaad1e">
+        <dex dex="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_7ec3b05184c31ed909d4e1c47d48e33decb00ab6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/.android/build-cache/5e86a7b616a8fbb6f89c195b56a0e8e75732d12a/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_45447aa040268a6d22604ff96d22e48b84e8c117/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/.android/build-cache/a5aad7db3197621a0e22fd8253a16f5503513e1a/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
+        <dex dex="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_d6e2fa674af693993eafa8d1586838112136006d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.4.0_413cc5e2efa03571069f933adb898daf6a297164/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/.android/build-cache/0ee7ea0b95eecb77351ce9517e11511d5d637df6/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
+        <dex dex="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_49a4f6fff89ac5c54059d28045bf6360862a5e8b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/rshar1/.android/build-cache/68062dc88806a8118b72998b6ef2d892f3cacc1c/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
+        <dex dex="/home/rshar1/Documents/AppliedCS/WordStack/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_031ef05c96b4719666d2b15a3cf512b628148ece/classes.dex" />
+    </item>
+
+</items>
