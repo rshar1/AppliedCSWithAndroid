@@ -59,6 +59,17 @@ public class StackedLayout extends LinearLayout {
         return tiles.empty();
     }
 
+    public String toString() {
+
+        StringBuilder st = new StringBuilder();
+        for (View v: tiles) {
+            LetterTile tile = (LetterTile) v;
+            st.append(tile.getText());
+        }
+        return st.toString();
+
+    }
+
     public void clear() {
         tiles.clear();
         removeAllViews();

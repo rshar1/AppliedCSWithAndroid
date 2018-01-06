@@ -32,15 +32,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int WORD_LENGTH = 5;
+    private static int WORD_LENGTH = 3;
     public static final int LIGHT_BLUE = Color.rgb(176, 200, 255);
     public static final int LIGHT_GREEN = Color.rgb(200, 255, 200);
-    private ArrayList<String> words = new ArrayList<>();
+    private HashMap<Integer, ArrayList<String>> sizeToWords = new HashMap<>();
     private Random random = new Random();
     private StackedLayout stackedLayout;
     private String word1, word2;
@@ -58,9 +59,11 @@ public class MainActivity extends AppCompatActivity {
             while((line = in.readLine()) != null) {
                 String word = line.trim();
                 // Only add the words that are of the desired length
-                if (word.length() == WORD_LENGTH) {
-                    words.add(word);
+                if (!sizeToWords.containsKey(word.length())) {
+                    sizeToWords.put(word.length(), new ArrayList<String>());
                 }
+                sizeToWords.get(word.length()).add(word);
+
             }
         } catch (IOException e) {
             Toast toast = Toast.makeText(this, "Could not load dictionary", Toast.LENGTH_LONG);
@@ -83,13 +86,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !stackedLayout.empty()) {
-                LetterTile tile = (LetterTile) stackedLayout.peek();
-                tile.moveToViewGroup((ViewGroup) v);
-                if (stackedLayout.empty()) {
-                    TextView messageBox = (TextView) findViewById(R.id.message_box);
-                    messageBox.setText(word1 + " " + word2);
-                }
-                placedTiles.push(tile);
+                moveTileToView(v);
                 return true;
             }
             return false;
@@ -119,17 +116,45 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case DragEvent.ACTION_DROP:
                     // Dropped, reassign Tile to the target Layout
-                    LetterTile tile = (LetterTile) event.getLocalState();
-                    tile.moveToViewGroup((ViewGroup) v);
-                    if (stackedLayout.empty()) {
-                        TextView messageBox = (TextView) findViewById(R.id.message_box);
-                        messageBox.setText(word1 + " " + word2);
-                    }
-                    placedTiles.push(tile);
+                    moveTileToView(v);
                     return true;
             }
             return false;
         }
+    }
+
+    private void moveTileToView(View v) {
+        LetterTile tile = (LetterTile) stackedLayout.peek();
+        tile.moveToViewGroup((ViewGroup) v);
+        if (stackedLayout.empty()) {
+            TextView messageBox = (TextView) findViewById(R.id.message_box);
+            // todo Get the current Words and check if they are in the dictionary
+
+            LinearLayout word1View = (LinearLayout) findViewById(R.id.word1);
+            LinearLayout word2View = (LinearLayout) findViewById(R.id.word2);
+
+            StringBuilder userWord1 = new StringBuilder();
+            StringBuilder userWord2 = new StringBuilder();
+
+            for (int i = 0; i < word1View.getChildCount(); i++) {
+                LetterTile tile1 = (LetterTile) word1View.getChildAt(i);
+                userWord1.append(tile1.getText());
+            }
+
+            for (int i = 0; i < word2View.getChildCount(); i++) {
+                LetterTile tile1 = (LetterTile) word2View.getChildAt(i);
+                userWord2.append(tile1.getText());
+            }
+
+
+            if (isValidWord(userWord1.toString()) && isValidWord(userWord2.toString())) {
+                gameOver(userWord1.toString(), userWord2.toString());
+            } else {
+                messageBox.setText("Invalid Text..." + word1 + " " + word2);
+            }
+
+        }
+        placedTiles.push(tile);
     }
 
     public boolean onStartGame(View view) {
@@ -142,6 +167,13 @@ public class MainActivity extends AppCompatActivity {
         stackedLayout.clear();
 
         messageBox.setText("Game started");
+
+        ArrayList<String> words = sizeToWords.get(WORD_LENGTH);
+
+        // Makes the word length longer every time user presses start game
+        if (sizeToWords.containsKey(WORD_LENGTH + 1) && sizeToWords.get(WORD_LENGTH + 1).size() > 2) {
+            WORD_LENGTH++;
+        }
 
         // Choose two random words
         word1 = words.get(random.nextInt(words.size()));
@@ -170,6 +202,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private boolean isValidWord(String word) {
+        int wordLength = word.length();
+        ArrayList<String> words = sizeToWords.get(wordLength);
+        if (words == null) return false;
+        return words.contains(word);
+    }
+
+    private void gameOver(String word1, String word2) {
+        TextView messageBox = (TextView) findViewById(R.id.message_box);
+        messageBox.setText("Correct: " + word1 + " " + word2);
     }
 
     public boolean onUndo(View view) {
