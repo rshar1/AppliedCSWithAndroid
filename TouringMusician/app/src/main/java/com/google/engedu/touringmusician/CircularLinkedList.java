@@ -25,11 +25,6 @@ public class CircularLinkedList implements Iterable<Point> {
     private class Node {
         Point point;
         Node prev, next;
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
     }
 
     Node head;
@@ -70,19 +65,64 @@ public class CircularLinkedList implements Iterable<Point> {
     }
 
     public void insertNearest(Point p) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+
+        Node toBeAdded = new Node();
+        toBeAdded.point = p;
+
+        if (head == null) {
+            toBeAdded.next = toBeAdded;
+            toBeAdded.prev = toBeAdded;
+            head = toBeAdded;
+        } else {
+            Node minNode = head;
+            float minDistance = distanceBetween(head.point, p);
+            Node current = head.next;
+            while (current != head) {
+                float currentDistance = distanceBetween(current.point, p);
+                if (currentDistance < minDistance) {
+                    minNode = current;
+                    minDistance = currentDistance;
+                }
+                current = current.next;
+            }
+            minNode.next.prev = toBeAdded;
+            toBeAdded.next = minNode.next;
+
+            minNode.next = toBeAdded;
+            toBeAdded.prev = minNode;
+        }
+
     }
 
     public void insertSmallest(Point p) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+
+        Node toBeAdded = new Node();
+        toBeAdded.point = p;
+
+        if (head == null) {
+            toBeAdded.next = toBeAdded;
+            toBeAdded.prev = toBeAdded;
+            head = toBeAdded;
+        } else {
+            Node minNode = head;
+            float minDifference = (distanceBetween(head.point, p) + distanceBetween(p, head.next.point)) - distanceBetween(head.point, head.next.point);
+            Node current = head.next;
+            while (current != head) {
+                float currentDifference = (distanceBetween(current.point, p) + distanceBetween(p, current.next.point)) - distanceBetween(current.point, current.next.point);
+                if (currentDifference < minDifference) {
+                    minNode = current;
+                    minDifference = currentDifference;
+                }
+                current = current.next;
+            }
+            minNode.next.prev = toBeAdded;
+            toBeAdded.next = minNode.next;
+
+            minNode.next = toBeAdded;
+            toBeAdded.prev = minNode;
+        }
+
+
     }
 
     public void reset() {
@@ -122,6 +162,5 @@ public class CircularLinkedList implements Iterable<Point> {
     public Iterator<Point> iterator() {
         return new CircularLinkedListIterator();
     }
-
 
 }
