@@ -66,8 +66,6 @@ public class TreeNode {
     }
 
     public void draw(Canvas c) {
-        // todo remove later so that values are not shown at start
-        showValue = true;
         Paint linePaint = new Paint();
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setStrokeWidth(3);
