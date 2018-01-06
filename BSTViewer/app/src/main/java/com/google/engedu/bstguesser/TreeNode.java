@@ -38,11 +38,15 @@ public class TreeNode {
     }
 
     public void insert(int valueToInsert) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+        if (valueToInsert < value && left == null) {
+            left = new TreeNode(valueToInsert);
+        } else if (valueToInsert < value) {
+            left.insert(valueToInsert);
+        } else if (valueToInsert > value && right == null) {
+            right = new TreeNode(valueToInsert);
+        } else if (valueToInsert > value) {
+            right.insert(valueToInsert);
+        }
     }
 
     public int getValue() {
@@ -62,6 +66,8 @@ public class TreeNode {
     }
 
     public void draw(Canvas c) {
+        // todo remove later so that values are not shown at start
+        showValue = true;
         Paint linePaint = new Paint();
         linePaint.setStyle(Paint.Style.STROKE);
         linePaint.setStrokeWidth(3);
