@@ -48,13 +48,34 @@ public class LetterTile extends TextView {
             StackedLayout owner = (StackedLayout) parent;
             owner.pop();
             targetView.addView(this);
-            freeze();
+            if (targetView.getChildCount() > 1) {
+                // freeze the last child that was in
+                LetterTile tile = (LetterTile) targetView.getChildAt(targetView.getChildCount() - 2);
+                tile.freeze();
+            }
             setVisibility(View.VISIBLE);
         } else {
-            ViewGroup owner = (ViewGroup) parent;
-            owner.removeView(this);
-            ((StackedLayout) targetView).push(this);
-            unfreeze();
+            if (targetView instanceof StackedLayout) {
+                ViewGroup owner = (ViewGroup) parent;
+                owner.removeView(this);
+                ((StackedLayout) targetView).push(this);
+                unfreeze();
+            } else {
+                ViewGroup owner = (ViewGroup) parent;
+                owner.removeView(this);
+                if (owner.getChildCount() > 0) {
+                    // unfreeze the last child that was in
+                    LetterTile tile = (LetterTile) targetView.getChildAt(targetView.getChildCount() - 1);
+                    tile.unfreeze();
+                }
+                targetView.addView(this);
+                if (targetView.getChildCount() > 1) {
+                    // freeze the last child that was in
+                    LetterTile tile = (LetterTile) targetView.getChildAt(targetView.getChildCount() - 2);
+                    tile.freeze();
+                }
+                setVisibility(View.VISIBLE);
+            }
         }
     }
 

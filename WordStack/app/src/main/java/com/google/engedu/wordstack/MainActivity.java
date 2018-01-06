@@ -74,10 +74,10 @@ public class MainActivity extends AppCompatActivity {
         verticalLayout.addView(stackedLayout, 3);
 
         View word1LinearLayout = findViewById(R.id.word1);
-        word1LinearLayout.setOnTouchListener(new TouchListener());
+        //word1LinearLayout.setOnTouchListener(new TouchListener());
         word1LinearLayout.setOnDragListener(new DragListener());
         View word2LinearLayout = findViewById(R.id.word2);
-        word2LinearLayout.setOnTouchListener(new TouchListener());
+        //word2LinearLayout.setOnTouchListener(new TouchListener());
         word2LinearLayout.setOnDragListener(new DragListener());
     }
 
@@ -116,7 +116,16 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case DragEvent.ACTION_DROP:
                     // Dropped, reassign Tile to the target Layout
-                    moveTileToView(v);
+                    if (event.getLocalState() instanceof LetterTile) {
+                        LetterTile tile = (LetterTile) event.getLocalState();
+                        if (tile.equals(stackedLayout.peek())) {
+                            moveTileToView(v);
+                        } else {
+                            tile.moveToViewGroup((ViewGroup) v);
+                        }
+                    }
+
+
                     return true;
             }
             return false;
@@ -128,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
         tile.moveToViewGroup((ViewGroup) v);
         if (stackedLayout.empty()) {
             TextView messageBox = (TextView) findViewById(R.id.message_box);
-            // todo Get the current Words and check if they are in the dictionary
 
             LinearLayout word1View = (LinearLayout) findViewById(R.id.word1);
             LinearLayout word2View = (LinearLayout) findViewById(R.id.word2);
