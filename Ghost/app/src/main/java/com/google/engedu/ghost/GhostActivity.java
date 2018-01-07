@@ -19,6 +19,7 @@ import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,11 +44,11 @@ public class GhostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ghost);
         AssetManager assetManager = getAssets();
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+        try {
+            dictionary = new SimpleDictionary(assetManager.open("words.txt"));
+        } catch (Exception exc) {
+            // todo exception thrown
+        }
         onStart(null);
     }
 
@@ -108,11 +109,24 @@ public class GhostActivity extends AppCompatActivity {
      */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
-        return super.onKeyUp(keyCode, event);
+        Log.i("GhostActivity", "Keycode: " + keyCode);
+
+        if (keyCode >= KeyEvent.KEYCODE_A && keyCode <= KeyEvent.KEYCODE_Z) {
+
+            TextView text = (TextView) findViewById(R.id.ghostText);
+            TextView status = (TextView) findViewById(R.id.gameStatus);
+
+            String currentFragment = (String) text.getText() + ((char) (keyCode + ('a' - KeyEvent.KEYCODE_A)));
+            text.setText(currentFragment);
+
+            if (dictionary.isWord(currentFragment)) {
+                status.setText("Game Over - " + currentFragment + " is a word");
+            }
+            return true;
+
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
+
     }
 }
