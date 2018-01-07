@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SimpleDictionary implements GhostDictionary {
@@ -45,6 +46,51 @@ public class SimpleDictionary implements GhostDictionary {
 
         if (prefix.length() == 0) return words.get((int)(Math.random() * words.size()));
 
+        int index = binarySearch(prefix);
+
+        if (index >= 0) return words.get(index);
+
+        return null;
+    }
+
+    @Override
+    public String getGoodWordStartingWith(String prefix) {
+        String selected = null;
+
+        if (prefix.length() == 0) return words.get((int)(Math.random() * words.size()));
+
+        int mid = binarySearch(prefix);
+
+        if (mid < 0) return null;
+
+        int lower = mid;
+        int upper = mid + 1;
+        ArrayList<String> odd = new ArrayList<>();
+        ArrayList<String> even = new ArrayList<>();
+        String current = "";
+
+        while (lower >= 0 && (current = words.get(lower)).contains(prefix)) {
+            if (current.length() % 2 == 0) even.add(current);
+            else odd.add(current);
+            lower--;
+        }
+
+        while (upper < words.size() && (current = words.get(upper)).contains(prefix)) {
+            if (current.length() % 2 == 0) even.add(current);
+            else odd.add(current);
+            upper++;
+        }
+
+        if (odd.size() == 0 || (prefix.length() % 2 == 0 && even.size() != 0)) {
+            return even.get((int)(Math.random() * even.size()));
+        } else {
+            return odd.get((int)(Math.random() * odd.size()));
+        }
+
+    }
+
+    private int binarySearch(String prefix) {
+
         int min = 0;
         int max = words.size() - 1;
 
@@ -54,7 +100,7 @@ public class SimpleDictionary implements GhostDictionary {
             String midWord = words.get(mid);
 
             if (midWord.contains(prefix)) {
-                return midWord;
+                return mid;
             } else if (midWord.compareTo(prefix) < 0) {
                 min = mid + 1;
             } else {
@@ -63,12 +109,8 @@ public class SimpleDictionary implements GhostDictionary {
 
         }
 
-        return null;
+        return -1;
+
     }
 
-    @Override
-    public String getGoodWordStartingWith(String prefix) {
-        String selected = null;
-        return selected;
-    }
 }

@@ -105,7 +105,7 @@ public class GhostActivity extends AppCompatActivity {
             return;
         } else {
 
-            String possibleWord = dictionary.getAnyWordStartingWith(fragment);
+            String possibleWord = dictionary.getGoodWordStartingWith(fragment);
             if (possibleWord == null) {
                 label.setText("Computer wins - Not a prefix");
                 return;
