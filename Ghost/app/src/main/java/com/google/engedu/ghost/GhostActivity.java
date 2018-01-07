@@ -97,6 +97,24 @@ public class GhostActivity extends AppCompatActivity {
     private void computerTurn() {
         TextView label = (TextView) findViewById(R.id.gameStatus);
         // Do computer turn stuff then make it the user's turn again
+        TextView text = (TextView) findViewById(R.id.ghostText);
+        String fragment = (String) text.getText();
+
+        if (fragment.length() >= 4 && dictionary.isWord(fragment)) {
+            label.setText("Computer wins - Thats a word");
+            return;
+        } else {
+
+            String possibleWord = dictionary.getAnyWordStartingWith(fragment);
+            if (possibleWord == null) {
+                label.setText("Computer wins - Not a prefix");
+                return;
+            }
+            Log.i("GhostActivity-Computer", possibleWord);
+            text.setText(possibleWord.substring(0, fragment.length() + 1));
+        }
+
+
         userTurn = true;
         label.setText(USER_TURN);
     }
@@ -111,7 +129,10 @@ public class GhostActivity extends AppCompatActivity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         Log.i("GhostActivity", "Keycode: " + keyCode);
 
+
         if (keyCode >= KeyEvent.KEYCODE_A && keyCode <= KeyEvent.KEYCODE_Z) {
+
+            if (!userTurn) return true;
 
             TextView text = (TextView) findViewById(R.id.ghostText);
             TextView status = (TextView) findViewById(R.id.gameStatus);
@@ -121,11 +142,32 @@ public class GhostActivity extends AppCompatActivity {
 
             if (dictionary.isWord(currentFragment)) {
                 status.setText("Game Over - " + currentFragment + " is a word");
+            } else {
+                userTurn = false;
+                computerTurn();
             }
+
             return true;
 
         } else {
             return super.onKeyUp(keyCode, event);
+        }
+
+    }
+
+    public void challenge(View view) {
+
+        TextView text = (TextView) findViewById(R.id.ghostText);
+        TextView status = (TextView) findViewById(R.id.gameStatus);
+        String fragment = (String) text.getText();
+
+        if (fragment.length() >= 4 && dictionary.isWord(fragment)) {
+            status.setText("User Wins!");
+        }
+        else if (dictionary.getAnyWordStartingWith(fragment) != null) {
+            status.setText("Computer wins - Possible Word: " + dictionary.getAnyWordStartingWith(fragment));
+        } else {
+            status.setText("User wins...No words can be formed");
         }
 
     }

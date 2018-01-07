@@ -42,6 +42,27 @@ public class SimpleDictionary implements GhostDictionary {
 
     @Override
     public String getAnyWordStartingWith(String prefix) {
+
+        if (prefix.length() == 0) return words.get((int)(Math.random() * words.size()));
+
+        int min = 0;
+        int max = words.size() - 1;
+
+        while (min <= max) {
+
+            int mid = min + (max - min) / 2;
+            String midWord = words.get(mid);
+
+            if (midWord.contains(prefix)) {
+                return midWord;
+            } else if (midWord.compareTo(prefix) < 0) {
+                min = mid + 1;
+            } else {
+                max = mid - 1;
+            }
+
+        }
+
         return null;
     }
 
