@@ -42,15 +42,95 @@ public class TreeNode {
             left = new TreeNode(valueToInsert);
         } else if (valueToInsert < value) {
             left.insert(valueToInsert);
+            height = Math.max(height, left.height + 1);
         } else if (valueToInsert > value && right == null) {
             right = new TreeNode(valueToInsert);
         } else if (valueToInsert > value) {
             right.insert(valueToInsert);
+            height = Math.max(height, right.height + 1);
         }
+        if (height == 0) height++;
+
+        int balance = getBalanceFactor();
+
+        // left left
+        if (balance > 1 && valueToInsert < this.left.value) {
+            rightRotate();
+        }
+
+        // right right
+        if (balance < -1 && valueToInsert > this.right.value) {
+            leftRotate();
+        }
+
+        // left right
+        if (balance > 1 && valueToInsert > this.left.value) {
+            this.left.leftRotate();
+            this.rightRotate();
+        }
+
+        // right left
+        if (balance < -1 && valueToInsert < this.right.value) {
+            this.right.rightRotate();
+            this.leftRotate();
+        }
+
+    }
+
+    private void leftRotate() {
+
+        TreeNode myLeft = new TreeNode(this.value);
+        myLeft.left = this.left;
+
+        this.value = this.right.value;
+        this.left = myLeft;
+
+        this.left.right = this.right.left;
+        this.right = this.right.right;
+
+
+        this.height--;
+        if (this.left.right != null && this.left.left != null) {
+            this.left.height = Math.max(this.left.right.height, this.left.left.height) + 1;
+        } else if (this.left.right != null) {
+            this.left.height = this.left.right.height + 1;
+        } else if (this.left.left != null) {
+            this.left.height = this.left.left.height + 1;
+        }
+
+    }
+
+    private void rightRotate() {
+
+        TreeNode myRight = new TreeNode(this.value);
+        myRight.right = this.right;
+
+        this.value = this.left.value;
+        this.right = myRight;
+
+        this.right.left = this.left.right;
+        this.left = this.left.left;
+
+        this.height--;
+        if (this.right.left != null && this.right.right != null) {
+            this.right.height = Math.max(this.right.left.height, this.right.right.height) + 1;
+        } else if (this.right.left != null) {
+            this.right.height = this.right.left.height + 1;
+        } else if (this.right.right != null) {
+            this.right.height = this.right.right.height + 1;
+        }
+
     }
 
     public int getValue() {
         return value;
+    }
+
+    private int getBalanceFactor() {
+        if (left == null && right == null) return 0;
+        else if (left == null) return -right.height;
+        else if (right == null) return left.height;
+        return left.height - right.height;
     }
 
     public void positionSelf(int x0, int x1, int y) {
