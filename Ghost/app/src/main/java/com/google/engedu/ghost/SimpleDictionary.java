@@ -99,7 +99,7 @@ public class SimpleDictionary implements GhostDictionary {
             int mid = min + (max - min) / 2;
             String midWord = words.get(mid);
 
-            if (midWord.contains(prefix)) {
+            if (midWord.startsWith(prefix)) {
                 return mid;
             } else if (midWord.compareTo(prefix) < 0) {
                 min = mid + 1;
