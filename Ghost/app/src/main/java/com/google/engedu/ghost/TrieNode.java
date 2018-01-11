@@ -102,6 +102,40 @@ public class TrieNode {
     }
 
     public String getGoodWordStartingWith(String s) {
-        return null;
+
+        ArrayList<String> words = new ArrayList<>();
+        TrieNode root = this;
+        StringBuilder prefix = new StringBuilder();
+
+        while (prefix.length() < s.length()) {
+
+            String current = s.substring(prefix.length(), prefix.length() + 1);
+            if (!root.children.containsKey(current)) {
+                return null;
+            }
+            else {
+                root = root.children.get(current);
+                prefix.append(current);
+            }
+
+        }
+
+        ArrayList<String> notWords = new ArrayList<>();
+        for (String key: root.children.keySet()) {
+            if (!root.children.get(key).isWord) {
+                notWords.add(key);
+            }
+        }
+
+        if (!notWords.isEmpty()) {
+            String myKey = notWords.get((int)(Math.random() * notWords.size()));
+            traversal(prefix + myKey, root.children.get(myKey), words);
+        } else {
+            traversal(prefix.toString(), root, words);
+        }
+
+        // Choose a random word from the list of words
+        return words.get((int) (Math.random() * words.size()));
+
     }
 }
