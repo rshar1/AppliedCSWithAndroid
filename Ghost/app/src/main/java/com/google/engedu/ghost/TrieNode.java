@@ -15,6 +15,11 @@
 
 package com.google.engedu.ghost;
 
+import android.util.Log;
+
+import java.lang.reflect.Array;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -28,14 +33,72 @@ public class TrieNode {
     }
 
     public void add(String s) {
+
+        if (s.equals("")) {
+            isWord = true;
+            return;
+        }
+
+        String nextChar = s.substring(0, 1);
+
+        if (!children.containsKey(nextChar)) {
+            children.put(nextChar, new TrieNode());
+        }
+
+        children.get(nextChar).add(s.substring(1));
+
+        return;
     }
 
     public boolean isWord(String s) {
-      return false;
+
+        if (s.length() == 0) return isWord;
+
+        String nextChar = s.substring(0 , 1);
+
+        if (!children.containsKey(nextChar)) return false;
+        return children.get(nextChar).isWord(s.substring(1));
     }
 
     public String getAnyWordStartingWith(String s) {
-        return null;
+        ArrayList<String> words = new ArrayList<>();
+        TrieNode root = this;
+        StringBuilder prefix = new StringBuilder();
+
+        while (prefix.length() < s.length()) {
+
+            String current = s.substring(prefix.length(), prefix.length() + 1);
+            if (!root.children.containsKey(current)) {
+                return null;
+            }
+            else {
+                root = root.children.get(current);
+                prefix.append(current);
+            }
+
+        }
+
+        // Fill the words list with words that start with this prefix
+        traversal(prefix.toString(), root, words);
+
+        // Choose a random word from the list of words
+        return words.get((int) (Math.random() * words.size()));
+
+    }
+
+    private void traversal(String prefix, TrieNode node, ArrayList<String> words) {
+
+        if (node.isWord && node.children.size() == 0) {
+            words.add(prefix);
+        } else {
+            if (node.isWord) {
+                words.add(prefix);
+            }
+            for (String key: node.children.keySet()) {
+                traversal(prefix + key, node.children.get(key), words);
+            }
+        }
+
     }
 
     public String getGoodWordStartingWith(String s) {

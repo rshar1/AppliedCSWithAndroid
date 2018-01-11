@@ -45,9 +45,10 @@ public class GhostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ghost);
         AssetManager assetManager = getAssets();
         try {
-            dictionary = new SimpleDictionary(assetManager.open("words.txt"));
+            dictionary = new FastDictionary(assetManager.open("words.txt"));
         } catch (Exception exc) {
             // todo exception thrown
+            Log.e("Ghost Activity", "onCreate: ", exc);
         }
         onStart(null);
     }
@@ -104,9 +105,9 @@ public class GhostActivity extends AppCompatActivity {
             label.setText("Computer wins - Thats a word");
             return;
         } else {
-
-            String possibleWord = dictionary.getGoodWordStartingWith(fragment);
+            String possibleWord = dictionary.getAnyWordStartingWith(fragment);
             if (possibleWord == null) {
+                Log.d("Ghost ACtivity", "computerTurn: " + possibleWord);
                 label.setText("Computer wins - Not a prefix");
                 return;
             }
