@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,11 +32,14 @@ import java.util.Queue;
 public class PathDictionary {
     private static final int MAX_WORD_LENGTH = 4;
     private static HashSet<String> words = new HashSet<>();
+    private static HashMap<String, HashSet<String>> wordsGraph = new HashMap<>();
+
 
     public PathDictionary(InputStream inputStream) throws IOException {
         if (inputStream == null) {
             return;
         }
+        HashMap<String, ArrayList<String>> pathGraph = new HashMap<>();
         Log.i("Word ladder", "Loading dict");
         BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
         String line = null;
@@ -46,7 +50,51 @@ public class PathDictionary {
                 continue;
             }
             words.add(word);
+
+            /*
+            With this implementation, the word is stored the number of letters that it has times.
+            Using a node, may be better
+             */
+
+
+            for (int i = 0; i < word.length(); i++) {
+                String node = word.substring(0, i) + "_" + word.substring(i + 1);
+
+                if (!pathGraph.containsKey(node)) {
+                    pathGraph.put(node, new ArrayList<String>());
+                }
+                pathGraph.get(node).add(word);
+            }
+
         }
+
+        Log.i("Word Ladder", "Dict loaded");
+        Log.i("Word Ladder", "Size of graph " + pathGraph.size());
+
+
+        // Go through the list of nodes, adding each one to the graph
+        /*
+        Makes the edges between each node
+         */
+
+        for (ArrayList<String> connections: pathGraph.values()) {
+
+            for (String word: connections) {
+
+                if (!wordsGraph.containsKey(word)) {
+                    wordsGraph.put(word, new HashSet<String>());
+                }
+
+                for (String neighbor: connections) {
+                    if (neighbor != word) {
+                        wordsGraph.get(word).add(neighbor);
+                    }
+                }
+
+            }
+
+        }
+
     }
 
     public boolean isWord(String word) {
@@ -54,7 +102,14 @@ public class PathDictionary {
     }
 
     private ArrayList<String> neighbours(String word) {
-        return new ArrayList<String>();
+
+        ArrayList<String> result = new ArrayList<>();
+
+        if (wordsGraph.containsKey(word)) {
+            result.addAll(wordsGraph.get(word));
+        }
+
+        return result;
     }
 
     public String[] findPath(String start, String end) {
