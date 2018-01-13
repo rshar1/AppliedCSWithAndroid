@@ -33,6 +33,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <activity android:name="com.google.engedu.wordladder.SolverActivity"
+            android:label="@string/title_activity_solver"
+            android:parentActivityName="com.google.engedu.wordladder.WordSelectionActivity">
+        </activity>
+    </application>
 </manifest>

@@ -35,6 +35,7 @@ import java.io.InputStream;
 public class WordSelectionActivity extends AppCompatActivity {
 
     private PathDictionary dictionary;
+    public static final String EXTRA_MESSAGE = "com.google.engedu.wordladder.WordSelectionActivity.PATH";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,9 @@ public class WordSelectionActivity extends AppCompatActivity {
                 startWordView.getText().toString().toLowerCase(),
                 endWordView.getText().toString().toLowerCase());
         if (words != null) {
-            // TODO: Launch new activity here
+            Intent intent = new Intent(this, SolverActivity.class);
+            intent.putExtra(EXTRA_MESSAGE, words);
+            startActivity(intent);
         } else {
             Log.i("Word ladder", "Word combination is not possible");
             Toast toast = Toast.makeText(this, "Couldn't find path between the two given words",

@@ -114,12 +114,6 @@ public class PathDictionary {
 
     public String[] findPath(String start, String end) {
 
-        Log.d("Path Dict", "findPath: Start: " + start + "End: " + end);
-
-        for (String word: neighbours(start)) {
-            Log.d("Path Dict", "Neighbor of start: " + word);
-        }
-
         ArrayDeque<ArrayList<String>> explored = new ArrayDeque<>();
 
         ArrayList<String> firstPath = new ArrayList<>();
