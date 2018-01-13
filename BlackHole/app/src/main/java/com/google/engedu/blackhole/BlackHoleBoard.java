@@ -17,6 +17,7 @@ package com.google.engedu.blackhole;
 
 import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class BlackHoleBoard {
     // triangular shape of the board.
     public final static int[][] NEIGHBORS = {{-1, -1}, {0, -1}, {-1, 0}, {1, 0}, {0, 1}, {1, 1}};
     // When we get to the Monte Carlo method, this will be the number of games to simulate.
-    private static final int NUM_GAMES_TO_SIMULATE = 2000;
+    private static final int NUM_GAMES_TO_SIMULATE = 50000;
     // The tiles for this board.
     private BlackHoleTile[] tiles;
     // The number of the current player. 0 for user, 1 for computer.
@@ -129,10 +130,47 @@ public class BlackHoleBoard {
 
     // Pick a good move for the computer to make. Returns the array index of the position to play.
     public int pickMove() {
-        // TODO: Implement this method have the computer make a move.
         // At first, we'll just invoke pickRandomMove (above) but later, you'll need to replace
         // it with an algorithm that uses the Monte Carlo method to pick a good move.
-        return pickRandomMove();
+
+        BlackHoleBoard copyBoard = new BlackHoleBoard();
+        copyBoard.copyBoardState(this);
+        HashMap<Integer, ArrayList<Integer>> moveToScore = new HashMap<>();
+
+        for (int i = 0; i < NUM_GAMES_TO_SIMULATE; i++) {
+
+            int firstMove = copyBoard.pickRandomMove();
+
+            while (!copyBoard.gameOver()) {
+                copyBoard.setValue(copyBoard.pickRandomMove());
+            }
+
+            int score = copyBoard.getScore();
+            if (!moveToScore.containsKey(firstMove)) {
+                moveToScore.put(firstMove, new ArrayList<Integer>());
+            }
+            moveToScore.get(firstMove).add(score);
+        }
+
+        int bestMove = pickRandomMove();
+        int bestScore = Integer.MAX_VALUE;
+
+        for (int move: moveToScore.keySet()) {
+            int average = 0;
+            for (int score: moveToScore.get(move)) {
+                average += score;
+            }
+            average /= moveToScore.get(move).size();
+
+            Log.d("The average Score", "pickMove: " + average);
+            if (average < bestScore) {
+                bestMove = move;
+                bestScore = average;
+            }
+
+        }
+
+        return bestMove;
     }
 
     // Makes the next move on the board at position i. Automatically updates the current player.
@@ -149,7 +187,7 @@ public class BlackHoleBoard {
      */
     public int getScore() {
         int score = 0;
-        
+
         int emptyIndex = 0;
         // Find the empty tile
         while (tiles[emptyIndex] != null) emptyIndex++;
