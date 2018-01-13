@@ -30,10 +30,10 @@ import java.util.HashSet;
 import java.util.Queue;
 
 public class PathDictionary {
-    private static final int MAX_WORD_LENGTH = 4;
+    private static final int MAX_WORD_LENGTH = 8;
     private static HashSet<String> words = new HashSet<>();
     private static HashMap<String, HashSet<String>> wordsGraph = new HashMap<>();
-    private static final int MAX_PATH_LENGTH = 4;
+    private static final int MAX_PATH_LENGTH = 7;
 
     public PathDictionary(InputStream inputStream) throws IOException {
         if (inputStream == null) {
