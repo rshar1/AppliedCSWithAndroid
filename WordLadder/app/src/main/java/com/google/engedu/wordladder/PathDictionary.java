@@ -33,7 +33,7 @@ public class PathDictionary {
     private static final int MAX_WORD_LENGTH = 4;
     private static HashSet<String> words = new HashSet<>();
     private static HashMap<String, HashSet<String>> wordsGraph = new HashMap<>();
-
+    private static final int MAX_PATH_LENGTH = 4;
 
     public PathDictionary(InputStream inputStream) throws IOException {
         if (inputStream == null) {
@@ -113,6 +113,28 @@ public class PathDictionary {
     }
 
     public String[] findPath(String start, String end) {
+
+        ArrayDeque<ArrayList<String>> explored = new ArrayDeque<>();
+
+        ArrayList<String> firstPath = new ArrayList<>();
+        firstPath.add(start);
+
+        explored.push(firstPath);
+
+        while (!explored.isEmpty()) {
+            ArrayList<String> current = explored.pop();
+            String lastInPath = current.get(current.size() - 1);
+            if (lastInPath.equals(end)) {
+                return current.toArray(new String[0]);
+            } else if (current.size() < MAX_PATH_LENGTH){
+                for (String neighbour: neighbours(lastInPath)) {
+                    ArrayList<String> next = new ArrayList<String> (current);
+                    next.add(neighbour);
+                }
+            }
+
+        }
+
         return null;
     }
 }
