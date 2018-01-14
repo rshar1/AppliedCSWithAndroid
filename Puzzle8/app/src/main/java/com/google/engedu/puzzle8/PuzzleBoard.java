@@ -17,6 +17,7 @@ package com.google.engedu.puzzle8;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -31,9 +32,12 @@ public class PuzzleBoard {
             { 0, 1 }
     };
     private ArrayList<PuzzleTile> tiles;
+    private int steps;
+    private PuzzleBoard previousBoard;
 
     PuzzleBoard(Bitmap bitmap, int parentWidth) {
 
+        steps = 0;
         tiles = new ArrayList<>();
 
         bitmap = Bitmap.createScaledBitmap(bitmap, parentWidth, parentWidth, false);
@@ -45,7 +49,7 @@ public class PuzzleBoard {
         for (int x = 0; x < NUM_TILES; x++) {
             for (int y = 0; y < NUM_TILES; y++) {
                 Bitmap tileBitmap = Bitmap.createBitmap(bitmap, tileWidth * y, tileHeight * x, tileWidth, tileHeight);
-                int tileNumber = (x * NUM_TILES) + y;
+                int tileNumber = x * NUM_TILES + y;
                 PuzzleTile tile = new PuzzleTile(tileBitmap, tileNumber);
                 tiles.add(tile);
             }
@@ -57,6 +61,9 @@ public class PuzzleBoard {
 
     PuzzleBoard(PuzzleBoard otherBoard) {
         tiles = (ArrayList<PuzzleTile>) otherBoard.tiles.clone();
+        steps = otherBoard.steps + 1;
+        previousBoard = otherBoard;
+
     }
 
     public void reset() {
@@ -87,6 +94,11 @@ public class PuzzleBoard {
             PuzzleTile tile = tiles.get(i);
             if (tile != null) {
                 if (tile.isClicked(x, y, i % NUM_TILES, i / NUM_TILES)) {
+                    Log.d("PuzzleBoard", "Number: " + tile.getNumber());
+                    Log.d("PuzzleBoard", "Index: " + i);
+                    Log.d("PuzzleBoard", "X: " + (i % NUM_TILES) + "Y: " + (i / NUM_TILES));
+                    Log.d("PuzzleBoard", "MD: " + manhattanDistance(i, tile.getNumber()));
+                    Log.d("PuzzleBoard", "solved: " + resolved());
                     return tryMoving(i % NUM_TILES, i / NUM_TILES);
                 }
             }
@@ -156,8 +168,36 @@ public class PuzzleBoard {
         return neighbours;
     }
 
+    private int manhattanDistance(int index, int number) {
+
+        int currentX = index % NUM_TILES;
+        int currentY = index / NUM_TILES;
+
+        int targetX = number % NUM_TILES;
+        int targetY = number / NUM_TILES;
+
+        int dX = Math.abs(targetX - currentX);
+        int dY = Math.abs(targetY - currentY);
+
+        return dX + dY;
+
+    }
+
     public int priority() {
-        return 0;
+        int manhattanDistance = 0;
+
+        for (int i = 0; i < tiles.size(); i++) {
+            PuzzleTile tile = tiles.get(i);
+            if (tile != null) {
+                manhattanDistance += manhattanDistance(i, tile.getNumber());
+            }
+        }
+
+        return manhattanDistance + steps;
+    }
+
+    public PuzzleBoard getPreviousBoard() {
+        return this.previousBoard;
     }
 
 }

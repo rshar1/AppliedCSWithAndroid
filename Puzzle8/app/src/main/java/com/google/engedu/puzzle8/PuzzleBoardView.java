@@ -19,11 +19,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Random;
 
 public class PuzzleBoardView extends View {
@@ -99,5 +103,40 @@ public class PuzzleBoardView extends View {
     }
 
     public void solve() {
+
+
+        PriorityQueue<PuzzleBoard> priorityQueue = new PriorityQueue<>(10, new Comparator<PuzzleBoard>() {
+            @Override
+            public int compare(PuzzleBoard puzzleBoard, PuzzleBoard t1) {
+                return Integer.compare(puzzleBoard.priority(), t1.priority());
+            }
+        });
+
+        priorityQueue.add(puzzleBoard);
+
+        while (!priorityQueue.isEmpty() && !puzzleBoard.resolved()) {
+            PuzzleBoard next = priorityQueue.poll();
+
+            if (next.resolved()) {
+                ArrayList<PuzzleBoard> toSolution = new ArrayList<>();
+
+                while (next != puzzleBoard) {
+                    toSolution.add(next);
+                    next = next.getPreviousBoard();
+                }
+
+                Collections.reverse(toSolution);
+                this.animation = toSolution;
+                invalidate();
+                return;
+
+            } else {
+                priorityQueue.addAll(next.neighbours());
+            }
+
+
+        }
+
+
     }
 }
