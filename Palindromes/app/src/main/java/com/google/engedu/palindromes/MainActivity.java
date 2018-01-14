@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isPalindrome(char[] text, int start, int end) {
+
+        for (int i = 0; i < text.length / 2; i++) {
+            if (text[start + i] != text[end - i - 1]) return false;
+        }
         return true;
     }
 
