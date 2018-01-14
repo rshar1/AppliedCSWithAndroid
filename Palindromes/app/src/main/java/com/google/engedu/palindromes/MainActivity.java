@@ -17,6 +17,7 @@ package com.google.engedu.palindromes;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Range;
 import android.view.View;
 import android.widget.EditText;
@@ -53,14 +54,90 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isPalindrome(char[] text, int start, int end) {
 
-        for (int i = 0; i < text.length / 2; i++) {
+        for (int i = 0; i < (end - start) / 2; i++) {
             if (text[start + i] != text[end - i - 1]) return false;
         }
         return true;
     }
 
     private PalindromeGroup breakIntoPalindromes(char[] text, int start, int end) {
+
+        //return breakIntoPalindromesGreedy(text, start, end);
+
+        //return breakIntoPalindromesRecursive(text, start, end);
+
+        return breakIntoPalindromesDynamic(text, start, end);
+    }
+
+    private PalindromeGroup breakIntoPalindromesGreedy(char[] text, int start, int end) {
+
         PalindromeGroup bestGroup = null;
+
+        while (start != end) {
+            int i = end;
+            while (i > start && !isPalindrome(text, start, i)) {
+                i--;
+            }
+            if (bestGroup == null) {
+                bestGroup = new PalindromeGroup(text, start, i);
+            } else {
+                bestGroup.append(new PalindromeGroup(text, start, i));
+            }
+
+            start = i;
+
+        }
         return bestGroup;
+    }
+
+    private PalindromeGroup breakIntoPalindromesRecursive(char[] text, int start, int end) {
+        PalindromeGroup bestGroup = null;
+
+        if (end - start == 1) {
+            return new PalindromeGroup(text, start, end);
+        }
+
+        // Recursive solution
+        for (int i = start + 1; i <= end; i++){
+
+            if (isPalindrome(text, start, i)) {
+                PalindromeGroup group = new PalindromeGroup(text, start, i);
+                group.append(breakIntoPalindromes(text, i, end));
+                if (bestGroup == null || bestGroup.length() > group.length())
+                    bestGroup = group;
+            }
+
+        }
+        return bestGroup;
+
+    }
+
+    private PalindromeGroup breakIntoPalindromesDynamic(char[] text, int start, int end) {
+        PalindromeGroup bestGroup = null;
+
+        if (end - start == 1) {
+            return new PalindromeGroup(text, start, end);
+        }
+
+        Range<Integer> range = new Range<>(start, end);
+        if (findings.containsKey(range)) {
+            return findings.get(range);
+        }
+
+        // Recursive solution
+        for (int i = start + 1; i <= end; i++){
+
+            if (isPalindrome(text, start, i)) {
+                PalindromeGroup group = new PalindromeGroup(text, start, i);
+                group.append(breakIntoPalindromes(text, i, end));
+                if (bestGroup == null || bestGroup.length() > group.length())
+                    bestGroup = group;
+            }
+
+        }
+
+        findings.put(range, bestGroup);
+        return bestGroup;
+
     }
 }
