@@ -33,6 +33,26 @@ public class PuzzleBoard {
     private ArrayList<PuzzleTile> tiles;
 
     PuzzleBoard(Bitmap bitmap, int parentWidth) {
+
+        tiles = new ArrayList<>();
+
+        bitmap = Bitmap.createScaledBitmap(bitmap, parentWidth, parentWidth, false);
+
+        int tileWidth = bitmap.getWidth() / NUM_TILES;
+        int tileHeight = bitmap.getHeight() / NUM_TILES;
+
+
+        for (int x = 0; x < NUM_TILES; x++) {
+            for (int y = 0; y < NUM_TILES; y++) {
+                Bitmap tileBitmap = Bitmap.createBitmap(bitmap, tileWidth * y, tileHeight * x, tileWidth, tileHeight);
+                int tileNumber = (x * NUM_TILES) + y;
+                PuzzleTile tile = new PuzzleTile(tileBitmap, tileNumber);
+                tiles.add(tile);
+            }
+        }
+
+        tiles.set(tiles.size() - 1, null);
+
     }
 
     PuzzleBoard(PuzzleBoard otherBoard) {
@@ -108,7 +128,32 @@ public class PuzzleBoard {
     }
 
     public ArrayList<PuzzleBoard> neighbours() {
-        return null;
+
+        ArrayList<PuzzleBoard> neighbours = new ArrayList<>();
+
+        // Find the null value
+        int index = 0;
+        while (tiles.get(index) != null) {
+            index++;
+        }
+
+        int nullX = index % NUM_TILES;
+        int nullY = index / NUM_TILES;
+
+        for (int[] delta: NEIGHBOUR_COORDS) {
+
+            int nX = nullX + delta[0];
+            int nY = nullY + delta[1];
+
+            if (nX >= 0 && nY >= 0 && nX < NUM_TILES && nY < NUM_TILES) {
+                PuzzleBoard neighbourBoard = new PuzzleBoard(this);
+                neighbourBoard.swapTiles(index, XYtoIndex(nX, nY));
+                neighbours.add(neighbourBoard);
+            }
+
+        }
+
+        return neighbours;
     }
 
     public int priority() {

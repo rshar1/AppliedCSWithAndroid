@@ -85,8 +85,7 @@ public class PuzzleActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
-            ImageView imageview = (ImageView) findViewById(R.id.myImageViewTest);
-            imageview.setImageBitmap(imageBitmap);
+            boardView.initialize(imageBitmap);
         }
 
     }
