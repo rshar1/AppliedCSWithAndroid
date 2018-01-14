@@ -32,7 +32,7 @@ public class ContinentMap extends View {
     private Cell[] map;
     private int boardSize;
     private Random random = new Random();
-    private int maxHeight = 0, minHeight = 0;
+    private int maxHeight = 7, minHeight = 1;
 
     private Integer[] DEFAULT_MAP = {
             1, 2, 3, 4, 5,
@@ -91,11 +91,46 @@ public class ContinentMap extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+
+        int shadeStep = 128 / (maxHeight - minHeight);
+        int cellWidth = canvas.getWidth() / boardSize;
+        int cellHeight = canvas.getHeight() / boardSize;
+        Paint textPaint = new Paint();
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setTextSize(50);
+        textPaint.setARGB(255, 0,0,0);
+
+        for (int x = 0; x < boardSize; x++) {
+            for (int y = 0; y < boardSize; y++) {
+                Cell cell = getMap(x, y);
+                Paint color = new Paint();
+
+                if (cell.flowsNW) {
+                    color.setARGB(255, 0, 255, 0);
+                } else if (cell.flowsSE) {
+                    color.setARGB(255, 0, 0, 255);
+                } else if(false) {
+                    color.setARGB(255, 255, 0, 0);
+                } else {
+                    // color a shade of grey
+                    int shade = 255 - (shadeStep * cell.height);
+                    Log.d("map", "Height" + cell.height + " Shade" + shade);
+                    color.setARGB(255, shade, shade, shade);
+                }
+
+                float left = x * cellWidth;
+                float top = y * cellHeight;
+                float bottom = (y + 1) * cellHeight;
+                float right = (x + 1) * cellWidth;
+
+
+                canvas.drawRect(left, top, right, bottom, color);
+                canvas.drawText(Integer.toString(cell.height), (left + right) / 2.0f, (top + bottom) / 2.0f, textPaint);
+
+            }
+        }
+
+        Log.d("Continental Map", "onDraw: Completed");
     }
 
     public void buildUpContinentalDivide(boolean oneStep) {
