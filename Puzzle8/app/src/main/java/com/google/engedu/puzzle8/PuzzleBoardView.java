@@ -131,7 +131,11 @@ public class PuzzleBoardView extends View {
                 return;
 
             } else {
-                priorityQueue.addAll(next.neighbours());
+
+                for (PuzzleBoard board: next.neighbours()) {
+                    if (!board.equals(next)) priorityQueue.add(board);
+                }
+
             }
 
 

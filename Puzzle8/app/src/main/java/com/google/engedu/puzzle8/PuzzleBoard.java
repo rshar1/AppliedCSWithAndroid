@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class PuzzleBoard {
 
-    private static final int NUM_TILES = 3;
+    private static final int NUM_TILES = 4;
     private static final int[][] NEIGHBOUR_COORDS = {
             { -1, 0 },
             { 1, 0 },
