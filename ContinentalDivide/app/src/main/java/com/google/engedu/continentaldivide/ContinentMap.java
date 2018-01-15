@@ -113,17 +113,13 @@ public class ContinentMap extends View {
                 } else if (cell.flowsSE) {
                     color.setARGB(255, 0, 0, shade);
                 } else {
-                    // color a shade of grey
-
-                    Log.d("map", "Height" + cell.height + " Shade" + shade);
-                    color.setARGB(255, shade, shade, shade);
+                        color.setARGB(255, shade, shade, shade);
                 }
 
                 float left = x * cellWidth;
                 float top = y * cellHeight;
                 float bottom = (y + 1) * cellHeight;
                 float right = (x + 1) * cellWidth;
-
 
                 canvas.drawRect(left, top, right, bottom, color);
                 canvas.drawText(Integer.toString(cell.height), (left + right) / 2.0f, (top + bottom) / 2.0f, textPaint);
@@ -207,13 +203,54 @@ public class ContinentMap extends View {
     }
 
     private Cell buildDownContinentalDivideRecursively(int x, int y, int previousHeight) {
-        Cell workingCell = new Cell();
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
-        return workingCell;
+
+        Cell cell = getMap(x, y);
+
+        if (cell == null) return null;
+
+        if (cell.height > previousHeight) return null;
+
+        if (cell.processing) return cell;
+        cell.processing = true;
+
+        if (cell.flowsSE || cell.flowsNW || cell.basin) {
+            return cell;
+        }
+
+        cell.flowsNW = x == 0 || y == 0;
+        cell.flowsSE = x == boardSize - 1|| y == boardSize - 1;
+
+        Cell other;
+
+        other = buildDownContinentalDivideRecursively(x, y - 1, cell.height);
+        if (other != null) {
+            cell.flowsNW = cell.flowsNW || other.flowsNW;
+            cell.flowsSE = cell.flowsSE || other.flowsSE;
+        }
+
+        other = buildDownContinentalDivideRecursively(x, y + 1, cell.height);
+        if (other != null) {
+            cell.flowsNW = cell.flowsNW || other.flowsNW;
+            cell.flowsSE = cell.flowsSE || other.flowsSE;
+        }
+
+        other = buildDownContinentalDivideRecursively(x - 1, y, cell.height);
+        if (other != null) {
+            cell.flowsNW = cell.flowsNW || other.flowsNW;
+            cell.flowsSE = cell.flowsSE || other.flowsSE;
+        }
+
+        other = buildDownContinentalDivideRecursively(x + 1, y, cell.height);
+        if (other != null) {
+            cell.flowsNW = cell.flowsNW || other.flowsNW;
+            cell.flowsSE = cell.flowsSE || other.flowsSE;
+        }
+
+
+        cell.basin = !cell.flowsNW && !cell.flowsSE;
+        cell.processing = false;
+
+        return cell;
     }
 
     public void generateTerrain(int detail) {
