@@ -36,9 +36,9 @@ public class ContinentMap extends View {
 
     private Integer[] DEFAULT_MAP = {
             1, 2, 3, 4, 5,
-            2, 3, 4, 5, 6,
-            3, 4, 5, 3, 1,
-            6, 7, 3, 4, 5,
+            2, 3, 4, 0, 6,
+            3, 4, 0, 3, 1,
+            6, 7, 0, 4, 5,
             5, 1, 2, 3, 4,
     };
 
@@ -104,16 +104,17 @@ public class ContinentMap extends View {
             for (int y = 0; y < boardSize; y++) {
                 Cell cell = getMap(x, y);
                 Paint color = new Paint();
+                int shade = 255 - (shadeStep * cell.height);
 
-                if (cell.flowsNW) {
-                    color.setARGB(255, 0, 255, 0);
+                if (cell.flowsNW && cell.flowsSE) {
+                    color.setARGB(255, shade, 0, 0);
+                } else if (cell.flowsNW) {
+                    color.setARGB(255, 0, shade, 0);
                 } else if (cell.flowsSE) {
-                    color.setARGB(255, 0, 0, 255);
-                } else if(false) {
-                    color.setARGB(255, 255, 0, 0);
+                    color.setARGB(255, 0, 0, shade);
                 } else {
                     // color a shade of grey
-                    int shade = 255 - (shadeStep * cell.height);
+
                     Log.d("map", "Height" + cell.height + " Shade" + shade);
                     color.setARGB(255, shade, shade, shade);
                 }
@@ -157,11 +158,25 @@ public class ContinentMap extends View {
 
     private void buildUpContinentalDivideRecursively(
             int x, int y, boolean flowsNW, boolean flowsSE, int previousHeight) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+
+        Cell cell = getMap(x, y);
+
+        if (cell == null) return;
+
+        if (cell.height < previousHeight) return;
+
+        if (cell.processing) return;
+        cell.processing = true;
+
+        cell.flowsNW = flowsNW || cell.flowsNW;
+        cell.flowsSE = flowsSE || cell.flowsSE;
+
+        buildUpContinentalDivideRecursively(x + 1, y, flowsNW, flowsSE, cell.height);
+        buildUpContinentalDivideRecursively(x - 1, y, flowsNW, flowsSE, cell.height);
+        buildUpContinentalDivideRecursively(x, y + 1, flowsNW, flowsSE, cell.height);
+        buildUpContinentalDivideRecursively(x, y - 1, flowsNW, flowsSE, cell.height);
+
+        cell.processing = false;
     }
 
     public void buildDownContinentalDivide(boolean oneStep) {
